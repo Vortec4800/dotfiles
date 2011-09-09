@@ -1,5 +1,5 @@
-# Make vim the default editor
-export EDITOR="vim"
+# Make emacs the default editor
+export EDITOR="emacs"
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
 
@@ -7,3 +7,9 @@ export MANPAGER="less -X"
 export HISTSIZE=32768
 export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
+
+# Set Path
+export PATH=$PATH:./:/opt/local/bin:/opt/local/sbin:/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:~
+
+# Set default prompt
+#export PS1="`hostname` \u$ "
