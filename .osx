@@ -28,6 +28,9 @@ defaults write com.apple.dashboard devmode -bool true
 # Enable AirDrop on all interfaces (Ethernet)
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
 
+# Enable iTunes song display in pop-up
+defaults write com.apple.dock itunes-notifications -bool TRUE
+
 # Show the ~/Library folder
 chflags nohidden ~/Library
 
