@@ -4,7 +4,7 @@
 	editor = nano
 	excludesfile = ~/.gitignore_global
 	attributesfile = ~/.gitattributes
-	whitespace = fix,space-before-tab,tab-in-indent,trailing-space
+	whitespace = fix,space-before-tab,trailing-space
 [color]
 	ui = true
 [color "branch"]
