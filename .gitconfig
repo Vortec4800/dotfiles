@@ -1,7 +1,7 @@
 [apply]
 	whitespace = fix
 [core]
-	editor = emacs
+	editor = nano
 	excludesfile = ~/.gitignore_global
 	attributesfile = ~/.gitattributes
 	whitespace = fix,space-before-tab,tab-in-indent,trailing-space
