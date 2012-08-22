@@ -9,7 +9,7 @@ export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
 
 # Set Path
-export PATH=$PATH:./:/opt/local/bin:/opt/local/sbin:~
+export PATH=$PATH:./:/opt/local/bin:/opt/local/sbin:~/phab/arcanist/bin:~
 
 # Set default prompt
 #export PS1="`hostname` \u$ "
