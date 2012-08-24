@@ -20,6 +20,8 @@
 	added = yellow
 	changed = green
 	untracked = cyan
+[branch]
+	autosetupmerge = always
 [merge]
 	log = true
 [url "git@github.com:"]
