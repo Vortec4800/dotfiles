@@ -23,3 +23,4 @@ xcuserdata
 *.pyc
 *.pyo
 .*.swp
+.idea
