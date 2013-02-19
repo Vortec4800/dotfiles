@@ -16,7 +16,6 @@ build
 *.perspective*
 xcuserdata
 *.xcuserdata*
-*.xcworkspace
 *.al
 .libs
 *.so.[0-9]*
