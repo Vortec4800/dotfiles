@@ -9,7 +9,6 @@
 .#*
 .DS_Store
 build
-*.nib
 *.so
 *.pbxuser
 *.mode*
