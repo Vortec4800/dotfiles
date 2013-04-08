@@ -9,7 +9,8 @@ export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
 
 # Set Path
-export PATH=$PATH:./:/opt/local/bin:/opt/local/sbin:~/phab/arcanist/bin:~
+export PATH=$PATH:.:/opt/local/bin:/opt/local/sbin:~/phab/arcanist/bin:~:/Applications/Android\ SDK/adt-bundle-mac/sdk/platfor\
+m-tools:/Applications/Android\ SDK/adt-bundle-mac/sdk/tools
 
 # Set default prompt
 #export PS1="`hostname` \u$ "
