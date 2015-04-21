@@ -16,6 +16,9 @@ alias lsd='ls -l | grep "^d"'
 # Undo a `git push`
 alias undopush="git push -f origin HEAD^:master"
 
+# Forgot to sudo
+alias fuck='sudo $(history -p \!\!)'
+
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en1"
