@@ -3,14 +3,23 @@ export EDITOR="nano"
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
 
-# Larger bash history (allow 32³ entries; default is 500)
-export HISTSIZE=32768
-export HISTFILESIZE=$HISTSIZE
-export HISTCONTROL=ignoredups
+# Enable persistent REPL history for `node`.
+NODE_REPL_HISTORY_FILE=~/.node_history;
+# Allow 32³ entries; the default is 1000.
+NODE_REPL_HISTORY_SIZE='32768';
 
-# Set Path
-export PATH=$PATH:.:/opt/local/bin:/opt/local/sbin:~/phab/arcanist/bin:~:/Applications/Android\ Studio.app/sdk/platfor\
-m-tools:/Applications/Android\ Studio.app/sdk/tools
+# Increase Bash history size. Allow 32³ entries; the default is 500.
+export HISTSIZE='32768';
+export HISTFILESIZE="${HISTSIZE}";
+# Omit duplicates and commands that begin with a space from history.
+export HISTCONTROL='ignoreboth';
 
-# Set default prompt
-#export PS1="`hostname` \u$ "
+# Prefer US English and use UTF-8.
+export LANG='en_US.UTF-8';
+export LC_ALL='en_US.UTF-8';
+
+# Highlight section titles in manual pages.
+export LESS_TERMCAP_md="${yellow}";
+
+# Always enable colored `grep` output.
+export GREP_OPTIONS='--color=auto';
