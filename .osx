@@ -42,6 +42,9 @@ defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
 # Disable smart dashes as they’re annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
+# Keep Photos app from launching when connecting a camera-like device
+defaults write com.apple.ImageCapture disableHotPlug -bool true
+
 ###############################################################################
 # SSD-specific tweaks                                                         #
 ###############################################################################
