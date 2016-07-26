@@ -2,6 +2,12 @@
 
 # ~/.osx — https://mths.be/osx
 
+# Verify this is an OS X Machine
+if [ "$(uname)" != "Darwin" ]; then
+  echo "Not running OS X Script as this isn't a Mac"
+  exit 0
+fi
+
 # Ask for the administrator password upfront
 sudo -v
 
