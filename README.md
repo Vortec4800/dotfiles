@@ -27,7 +27,7 @@ Full instructions for the above steps can be referenced from https://help.github
 ## Installation
 
 ```bash
-git clone git@github.com:Vortec4800/dotfiles.git && cd dotfiles && ./bootstrap.sh
+git clone https://github.com/Vortec4800/dotfiles.git && cd dotfiles && ./bootstrap.sh
 ```
 
 To update, `cd` into your local `dotfiles` repository and then:
