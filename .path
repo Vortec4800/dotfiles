@@ -1,1 +1,1 @@
-export PATH="~/phab/arcanist/bin:.:/Applications/AndroidSDK/sdk/platform-tools:/Applications/AndroidSDK/sdk/tools:$PATH"
+export PATH="~/phab/arcanist/bin:.:~/Library/Android/sdk/platform-tools:~/Library/Android/sdk/tools:$PATH"
