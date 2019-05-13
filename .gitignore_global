@@ -1,24 +1,55 @@
+# files for the dex VM
+*.dex
+
+# Compiled files
+*.class
 *.o
 *.lo
 *.la
-#*#
+*.so
+*.so.[0-9]*
+*.pyc
+*.pyo
+.*.swp
+
+# Git cruft
 .*.rej
 *.rej
+
+# generated files
+gen/
+.libs
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Windows thumbnail db
+Thumbs.db
+
+# OSX/Unix files
+.DS_Store
 .*~
 *~
 .#*
-.DS_Store
-build
-*.so
+#*#
+
+# Xcode
 *.pbxuser
 *.mode*
 *.perspective*
 xcuserdata
 *.xcuserdata*
-*.al
-.libs
-*.so.[0-9]*
-*.pyc
-*.pyo
-.*.swp
 workspace.xml
+
+# Android Studio
+*.iml
+.idea/workspace.xml
+.gradle
+build/
+.navigation
+captures/
+output.json
+
+# Built application files
+*.apk
+*.ap_
