@@ -74,7 +74,7 @@ plugins=(
   npm
   nvm
   sudo
-  osx
+  macos
 )
 
 source $ZSH/oh-my-zsh.sh
