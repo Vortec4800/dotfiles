@@ -9,7 +9,7 @@ This is only required for a brand new machine, and is used to authenticate your 
 Create the key in the default directory:
 
 ```bash
-ssh-keygen -t rsa -C "Computer Name"
+ssh-keygen -t ed25519 -C "Computer Name"
 ```
 
 When it asks for a password, press enter for no password.
@@ -17,7 +17,7 @@ When it asks for a password, press enter for no password.
 Copy the key to the clipboard:
 
 ```bash
-pbcopy < ~/.ssh/id_rsa.pub
+pbcopy < ~/.ssh/id_ed25519.pub
 ```
 
 Then go to Account Settings in GitHub and add this key to your account.
