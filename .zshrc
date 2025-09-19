@@ -75,6 +75,7 @@ plugins=(
   nvm
   sudo
   macos
+  dotenv
 )
 
 source $ZSH/oh-my-zsh.sh
