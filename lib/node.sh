@@ -29,7 +29,9 @@ stage_node() {
 	fi
 	# shellcheck disable=SC2086 # one argument per package
 	set -- $globals
-	if [ $# -gt 0 ]; then
-		run fnm exec --using "$default" npm install --global "$@"
+	# A failed npm install (often a root-owned ~/.npm) shouldn't stop the later stages
+	if [ $# -gt 0 ] && ! run fnm exec --using "$default" npm install --global "$@"; then
+		warn "npm couldn't install the global packages: $*"
+		info "Fix the npm error above, then run ./bootstrap.sh node"
 	fi
 }
