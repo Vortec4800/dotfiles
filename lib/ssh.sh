@@ -11,6 +11,7 @@ SSH_KEY="$SSH_DIR/id_ed25519"
 KEYS_DIR="$DOTFILES/ssh/keys"
 HOSTS_DIR="$DOTFILES/ssh/hosts"
 SSHD_DROPIN=/etc/ssh/sshd_config.d/050-dotfiles.conf
+SSH_HOST_PUB=/etc/ssh/ssh_host_ed25519_key.pub
 AK_BEGIN="# >>> dotfiles: machine keys from ~/dotfiles/ssh/keys (bootstrap.sh replaces this block) >>>"
 AK_END="# <<< dotfiles <<<"
 
@@ -20,10 +21,11 @@ stage_ssh() {
 	ensure_ssh_dir
 	ssh_key_setup
 	ssh_config_include
+	# Remote Login first: the host key ssh_capture_this_mac saves only exists once it's on
+	ssh_remote_login
 	ssh_capture_this_mac
 	ssh_refresh
 	ssh_github_upload
-	ssh_remote_login
 	ssh_keys_only
 }
 
@@ -86,13 +88,22 @@ ssh_config_include() {
 
 # Put this Mac's user key and host key into the repo, so the other machines trust it
 ssh_capture_this_mac() {
-	local host_pub=/etc/ssh/ssh_host_ed25519_key.pub
 	# Redirects, not pipes: write_file must run in this shell to record REPO_CHANGED
 	if [ -f "$SSH_KEY.pub" ]; then
 		write_file "$KEYS_DIR/$ALIAS.pub" 644 < <(awk -v a="$ALIAS" 'NF >= 2 { print $1, $2, a; exit }' "$SSH_KEY.pub")
 	fi
-	if [ -r "$host_pub" ]; then
-		write_file "$HOSTS_DIR/$ALIAS.pub" 644 < <(awk 'NF >= 2 { print $1, $2; exit }' "$host_pub")
+	# macOS creates the host keys when sshd first answers a connection, so a Mac whose
+	# Remote Login was just turned on has none until something connects
+	if [ ! -r "$SSH_HOST_PUB" ] && [ "$DRY_RUN" != 1 ] && remote_login_on; then
+		ssh-keyscan -T 5 -t ed25519 127.0.0.1 >/dev/null 2>&1 || true
+	fi
+	if [ -r "$SSH_HOST_PUB" ]; then
+		write_file "$HOSTS_DIR/$ALIAS.pub" 644 < <(awk 'NF >= 2 { print $1, $2; exit }' "$SSH_HOST_PUB")
+	elif [ "$DRY_RUN" = 1 ]; then
+		dry "would save this Mac's host key, which macOS creates once Remote Login is on"
+	else
+		warn "This Mac has no SSH host key yet, so your other Macs can't log in or check who they're talking to."
+		info "Turn on Remote Login (System Settings → General → Sharing), then run ./bootstrap.sh ssh again."
 	fi
 }
 
