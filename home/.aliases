@@ -1,0 +1,48 @@
+# Navigation, listing and `g` for git come from oh-my-zsh.
+
+# Shortcuts
+alias dl="cd ~/Downloads"
+alias dt="cd ~/Desktop"
+alias h="history"
+
+# Print each PATH entry on a separate line
+alias path='print -l $path'
+
+# Get week number
+alias week='date +%V'
+
+# Stopwatch
+alias timer='echo "Timer started. Stop with Ctrl-D." && date && time cat && date'
+
+# Update Homebrew and its packages, npm globals for the current Node, and list macOS updates
+alias update='brew update && brew upgrade && brew cleanup && npm update -g; softwareupdate --list'
+
+# Pull the dotfiles repo, then refresh links and SSH keys/hosts from it
+alias dotsync='~/dotfiles/bootstrap.sh sync'
+
+# IP addresses
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="ipconfig getifaddr en0"
+
+# Flush the DNS cache
+alias flush="sudo dscacheutil -flushcache && sudo killall -HUP mDNSResponder"
+
+# Clean up LaunchServices to remove duplicates in the “Open With” menu
+alias lscleanup="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister -kill -r -domain local -domain system -domain user && killall Finder"
+
+# Trim new lines and copy to clipboard
+alias c="tr -d '\n' | pbcopy"
+
+# Recursively delete `.DS_Store` files
+alias cleanup="find . -type f -name '.DS_Store' -ls -delete"
+
+# PlistBuddy alias, because sometimes `defaults` just doesn’t cut it
+alias plistbuddy="/usr/libexec/PlistBuddy"
+
+# Intuitive map function
+# For example, to list all directories that contain a certain file:
+# find . -name .gitignore | map dirname
+alias map="xargs -n1"
+
+# Reload the shell (i.e. invoke as a login shell)
+alias reload="exec $SHELL -l"

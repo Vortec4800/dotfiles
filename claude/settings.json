@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 3650,
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "defaultMode": "plan"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "input=$(cat); model=$(echo \"$input\" | jq -r '.model.display_name'); cwd=$(echo \"$input\" | jq -r '.workspace.current_dir'); time=$(date '+%H:%M:%S'); if [ -d \"$cwd/.git\" ]; then branch=$(cd \"$cwd\" && git branch --show-current 2>/dev/null); git_info=\" [$branch]\"; else git_info=\"\"; fi; printf \"\\033[36m%s\\033[0m in \\033[32m%s\\033[0m%s \\033[35m%s\\033[0m\" \"$model\" \"$(basename \"$cwd\")\" \"$git_info\" \"$time\""
+  },
+  "enabledPlugins": {
+    "swift-lsp@claude-plugins-official": true,
+    "andrej-karpathy-skills@karpathy-skills": true,
+    "skill-creator@claude-plugins-official": true,
+    "postman@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "karpathy-skills": {
+      "source": {
+        "source": "github",
+        "repo": "forrestchang/andrej-karpathy-skills"
+      },
+      "autoUpdate": true
+    },
+    "firebase": {
+      "source": {
+        "source": "github",
+        "repo": "firebase/agent-skills"
+      },
+      "autoUpdate": true
+    },
+    "unifi-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "sirkirby/unifi-mcp"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "xhigh"
+    }
+  },
+  "tui": "fullscreen",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "skipWorkflowUsageWarning": true,
+  "theme": "dark-daltonized",
+  "agentPushNotifEnabled": true,
+  "voiceEnabled": true
+}

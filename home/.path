@@ -1,0 +1,13 @@
+# Extra PATH entries. `typeset -U` drops duplicates, and `(N-/)` skips
+# folders that don't exist, so tools that aren't installed leave no trace.
+# Installers that append to ~/.zshrc or ~/.zprofile belong here instead.
+typeset -U path
+path=(
+	$HOME/.local/bin(N-/)
+	$path
+	$HOME/Library/Android/sdk/platform-tools(N-/)
+	$HOME/Library/Android/sdk/cmdline-tools/latest/bin(N-/)
+	$HOME/Library/Application\ Support/JetBrains/Toolbox/scripts(N-/)
+	$HOME/.antigravity/antigravity/bin(N-/)
+	$HOME/.lmstudio/bin(N-/)
+)

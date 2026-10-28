@@ -1,0 +1,2 @@
+# Messages show paths as ~/… on purpose
+disable=SC2088

@@ -1,0 +1,27 @@
+# Global ignore: OS and editor clutter only. Build output belongs in each
+# project's own .gitignore, so other clones of the project ignore it too.
+
+# macOS
+.DS_Store
+._*
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+
+# Editors and IDEs
+.*.swp
+*~
+.#*
+\#*#
+xcuserdata/
+.idea/workspace.xml
+*.iml
+
+# Leftovers from patches and merges
+*.rej
+
+# Local, never-committed overrides
+*.local.*
+**/.claude/settings.local.json

@@ -1,0 +1,42 @@
+# Apps for every Mac. App Store apps install only if your Apple ID already owns
+# them; bootstrap asks you to sign in to the App Store before installing them.
+
+# Development
+cask "tower"
+cask "zed"
+cask "visual-studio-code"
+cask "jetbrains-toolbox"
+cask "docker-desktop"
+cask "postman"
+cask "sf-symbols"
+
+# AI
+cask "claude"
+cask "google-gemini"
+cask "granola"
+cask "lm-studio"
+cask "lm-studio-bionic"
+
+# Other
+cask "google-chrome"
+cask "stats"
+cask "tailscale-app"
+cask "vlc"
+cask "balenaetcher"
+
+# Mac App Store
+mas "BBEdit", id: 404009241
+mas "TestFlight", id: 899247664
+mas "RocketSim", id: 1504940162
+mas "Apple Configurator", id: 1037126344
+mas "Transmit", id: 1436522307
+mas "Things 3", id: 904280696
+mas "Keka", id: 470158793
+mas "DaisyDisk", id: 411643860
+mas "1Blocker", id: 1365531024
+mas "Speedtest", id: 1153157709
+mas "Keynote", id: 409183694
+mas "Numbers", id: 361304891
+mas "Pages", id: 361309726
+mas "Uplock", id: 6469049274
+mas "Notability", id: 360593530

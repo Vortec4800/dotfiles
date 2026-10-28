@@ -13,13 +13,13 @@
 	di = !"d() { git diff --patch-with-stat HEAD~$1; }; git diff-index --quiet HEAD -- || clear; d"
 
 	# Pull in remote changes for the current repository and all its submodules
-	p = !"git pull; git submodule foreach git pull origin master"
+	p = pull --recurse-submodules
 
 	# Clone a repository including all submodules
 	c = clone --recursive
 
-	# Commit all changes
-	ca = !git add -A && git commit -av
+	# Commit all changes, leaving submodule pointers alone
+	ca = !git add ':(exclude,attr:builtin_objectmode=160000)' && git commit -av
 
 	# Switch to a branch, creating it if necessary
 	go = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
@@ -28,6 +28,9 @@
 	tags = tag -l
 	branches = branch -a
 	remotes = remote -v
+
+	# List aliases
+	aliases = config --get-regexp alias
 
 	# Amend the currently staged files to the latest commit
 	amend = commit --amend --reuse-message=HEAD
@@ -53,41 +56,54 @@
 	# Find commits by commit message
 	fm = "!f() { git log --pretty=format:'%C(yellow)%h  %Cblue%ad  %Creset%s%Cgreen  [%cn] %Cred%d' --decorate --date=short --grep=$1; }; f"
 
-	# Remove branches that have already been merged with master
-	# a.k.a. ‘delete merged’
-	dm = "!git branch --merged | grep -v '\\*' | xargs -n 1 git branch -d"
+	# Remove branches that have already been merged into the current branch
+	# a.k.a. ‘delete merged’. Never deletes main, master, the current branch,
+	# or a branch checked out in another worktree.
+	dm = "!git branch --merged | grep -vE '^[*+]|^[[:space:]]+(main|master)$' | xargs -r -n 1 git branch -d"
 
 	# List contributors with number of commits
 	contributors = shortlog --summary --numbered
 
-	# Merge GitHub pull request on top of the `master` branch
-	mpr = "!f() { \
-		if [ $(printf \"%s\" \"$1\" | grep '^[0-9]\\+$' > /dev/null; printf $?) -eq 0 ]; then \
-			git fetch origin refs/pull/$1/head:pr/$1 && \
-			git rebase master pr/$1 && \
-			git checkout master && \
-			git merge pr/$1 && \
-			git branch -D pr/$1 && \
-			git commit --amend -m \"$(git log -1 --pretty=%B)\n\nCloses #$1.\"; \
-		fi \
-	}; f"
+	# Show the configured email address
+	whoami = config user.email
 
 [apply]
 
+	# Detect whitespace errors when applying a patch
+	whitespace = fix
+
+[branch]
+
+	# Show most recently changed branches first
+	sort = -committerdate
+
+[commit]
+
+	# Show the diff in the commit message editor
+	verbose = true
+
+	# Sign every commit with the SSH key set in ~/.gitconfig.local
+	gpgsign = true
+
 [core]
+
 	editor = nano
-	excludesfile = ~/.gitignore_global
-	attributesfile = ~/.gitattributes
-	whitespace = fix,space-before-tab,trailing-space
 	autocrlf = input
 
-	# Make `git rebase` safer on OS X
+	# Treat spaces before tabs and all kinds of trailing whitespace as an error
+	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+
+	# Make `git rebase` safer on macOS
 	# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
 	trustctime = false
 
-	# Prevent showing files whose names contain non-ASCII symbols as unversioned.
-	# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
-	precomposeunicode = false
+	# devsync (Syncthing) keeps mtimes but not inodes, so compare only mtime and
+	# size; otherwise git rewrites a synced .git/index on every Mac
+	checkStat = minimal
+
+	# Store file names in precomposed Unicode, so names with accents match
+	# between macOS and other systems
+	precomposeunicode = true
 
 [color]
 
@@ -118,29 +134,70 @@
 
 	# Detect copies as well as renames
 	renames = copies
+	algorithm = histogram
+	colorMoved = default
 
 [diff "bin"]
+
 	# Use `hexdump` to diff binary files
 	textconv = hexdump -v -C
 
+[fetch]
+
+	# Remove remote-tracking branches that no longer exist on the remote
+	prune = true
+
+[gpg]
+
+	format = ssh
+
+[gpg "ssh"]
+
+	# Written by bootstrap: lets `git log --show-signature` verify your own signatures
+	allowedSignersFile = ~/.config/git/allowed_signers
+
 [help]
 
-	# Automatically correct and execute mistyped commands
-	autocorrect = 1
+	# Ask before running a guessed command
+	autocorrect = prompt
+
+[init]
+
+	defaultBranch = master
 
 [merge]
 
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
+	conflictstyle = zdiff3
+
+[pull]
+
+	# Never create merge commits on pull; when histories diverge, stop and let me choose
+	ff = only
 
 [push]
 
-	# Use the Git 1.x.x default to avoid errors on machines with old Git
-	# installations. To use `simple` instead, add this to your `~/.extra` file:
-	# `git config --global push.default simple`. See http://git.io/mMah-w.
-	default = matching
+	default = simple
 	# Make `git push` push relevant annotated tags when pushing branches out.
 	followTags = true
+	# Push a new branch to a same-named remote branch without `-u`
+	autoSetupRemote = true
+
+[rebase]
+
+	autoStash = true
+	autoSquash = true
+
+[rerere]
+
+	# Remember how conflicts were resolved and reuse it
+	enabled = true
+
+[tag]
+
+	sort = version:refname
+	gpgsign = true
 
 # URL shorthands
 
@@ -148,9 +205,8 @@
 
 	insteadOf = "gh:"
 	pushInsteadOf = "github:"
-	pushInsteadOf = "git://github.com/"
 
-[url "git://github.com/"]
+[url "https://github.com/"]
 
 	insteadOf = "github:"
 
@@ -158,8 +214,12 @@
 
 	insteadOf = "gst:"
 	pushInsteadOf = "gist:"
-	pushInsteadOf = "git://gist.github.com/"
 
-[url "git://gist.github.com/"]
+[url "https://gist.github.com/"]
 
 	insteadOf = "gist:"
+
+# Identity and signing key for this machine, written by bootstrap. Untracked.
+[include]
+
+	path = ~/.gitconfig.local

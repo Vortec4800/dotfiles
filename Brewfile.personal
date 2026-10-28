@@ -1,0 +1,35 @@
+# Personal Macs only (profile "personal").
+
+tap "stripe/stripe-cli"
+
+brew "stripe/stripe-cli/stripe"
+brew "supabase"
+
+cask "gcloud-cli"
+
+# 3D printing and making
+cask "bambu-studio"
+cask "lightburn"
+cask "openscad"
+
+# Games and controllers
+cask "moonlight"
+cask "pxplay"
+cask "openlogi"
+
+# Home and NAS
+cask "synology-drive"
+cask "qfinder-pro"
+cask "wifiman"
+cask "arq"
+cask "scansnap-home"
+
+# Creative
+cask "affinity"
+
+# Mac App Store
+mas "Final Cut Pro", id: 424389933
+mas "GameTrack", id: 1136800740
+mas "Rakuten Cash Back", id: 1451893560
+mas "Itsyhome", id: 6758070650
+mas "AutoMounter", id: 1160435653

@@ -1,0 +1,11 @@
+# Work Macs only (profile "work"). Apps that the company's device management
+# installs (Office, Teams, Defender, Company Portal, …) never go here.
+
+brew "awscli"
+brew "aws-sam-cli"
+
+cask "parallels"
+cask "figma"
+cask "drawio"
+
+mas "Slack", id: 803453959
