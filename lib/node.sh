@@ -1,7 +1,7 @@
 # shellcheck shell=bash
 # Stage: node. Node versions via fnm, and global npm packages on the default one.
 
-NODE_VERSIONS="22 20"                # the first one becomes the default
+NODE_VERSIONS="22 20 24"                # the first one becomes the default
 NPM_GLOBALS_ALL="firebase-tools"
 NPM_GLOBALS_WORK="aws-cdk"
 NPM_GLOBALS_PERSONAL=""
