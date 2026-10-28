@@ -28,7 +28,6 @@ cask "scansnap-home"
 cask "affinity"
 
 # Mac App Store
-mas "Final Cut Pro", id: 424389933
 mas "GameTrack", id: 1136800740
 mas "Rakuten Cash Back", id: 1451893560
 mas "Itsyhome", id: 6758070650
