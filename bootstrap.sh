@@ -28,6 +28,8 @@
 #
 # Backups go to ~/.dotfiles-backup/<timestamp>/. Machine state lives in
 # ~/.config/dotfiles/machine.env (DOTFILES_PROFILE / DOTFILES_ALIAS override it).
+# When this Mac's SSH keys in the repo are new or changed, the end of any run
+# offers to commit and push them.
 
 set -eu
 
@@ -116,17 +118,13 @@ main() {
 			info "A real run would move replaced files to $(tildify "$BACKUP_DIR")"
 		fi
 		if [ "$REPO_CHANGED" = 1 ]; then
-			info "A real run would add files to ~/dotfiles (ssh/keys, ssh/hosts) for you to commit and push."
+			info "A real run would add this Mac's SSH keys to ~/dotfiles (ssh/keys, ssh/hosts) and offer to push them."
 		fi
-		return 0
-	fi
-	if [ "$BACKED_UP" = 1 ]; then
+	elif [ "$BACKED_UP" = 1 ]; then
 		info "Replaced files are in $(tildify "$BACKUP_DIR")"
 	fi
-	if [ "$REPO_CHANGED" = 1 ]; then
-		info "This run added or changed files in ~/dotfiles (ssh/keys, ssh/hosts). Commit and push them,"
-		info "then run dotsync on your other Macs so they trust this one."
-	fi
+	# Whenever this Mac's key files are new or changed, from this run or an earlier one
+	ssh_publish_keys
 }
 
 main "$@"

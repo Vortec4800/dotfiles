@@ -12,13 +12,6 @@ devsync_instructions() {
 	info "Details: ~/devsync/INSTALL.md, Phase 4 (each additional Mac)."
 }
 
-github_ssh_ok() {
-	local out
-	out=$(ssh -o BatchMode=yes -o ConnectTimeout=8 -T git@github.com 2>&1 || true)
-	case $out in *"successfully authenticated"*) return 0 ;; esac
-	return 1
-}
-
 # devsync's setup moves existing ~/.claude items aside on a new Mac so Voyager's
 # copies arrive cleanly, but its list leaves out rules/, which it does sync. A
 # baseline rules/ seeded by the claude stage would then clash with Voyager's.

@@ -290,6 +290,79 @@ KbdInteractiveAuthentication no"
 	esac
 }
 
+github_ssh_ok() {
+	local out
+	out=$(ssh -o BatchMode=yes -o ConnectTimeout=8 -T git@github.com 2>&1 || true)
+	case $out in *"successfully authenticated"*) return 0 ;; esac
+	return 1
+}
+
+# Pushing over HTTPS needs a token; over SSH, this Mac's key (on GitHub by now) is enough
+ssh_use_ssh_remote() {
+	local url
+	url=$(git -C "$DOTFILES" remote get-url origin 2>/dev/null || true)
+	case $url in
+		https://github.com/*) ;;
+		*) return 0 ;;
+	esac
+	if ! github_ssh_ok; then
+		warn "GitHub doesn't accept this Mac's key over SSH yet, so the push goes over HTTPS"
+		return 0
+	fi
+	url="git@github.com:${url#https://github.com/}"
+	info "pushing over SSH from now on: origin is $url"
+	run git -C "$DOTFILES" remote set-url origin "$url"
+}
+
+# Called from bootstrap.sh's summary. Offers to commit and push this Mac's key
+# files, so the other machines trust it. The commit holds only those two files.
+ssh_publish_keys() {
+	[ -n "$ALIAS" ] || return 0
+	local status files ahead msg=Update
+	status=$(git -C "$DOTFILES" status --porcelain --untracked-files=all -- "ssh/keys/$ALIAS.pub" "ssh/hosts/$ALIAS.pub") || return 0
+	[ -n "$status" ] || return 0
+	files=$(printf '%s\n' "$status" | cut -c4-)
+	case $status in *'??'*) msg=Add ;; esac
+	msg="$msg $ALIAS's SSH keys"
+	info "This Mac's SSH keys aren't on GitHub yet, so your other Macs don't trust it:"
+	printf '%s\n' "$files" | sed 's|^|     ~/dotfiles/|'
+	ahead=$(git -C "$DOTFILES" log --oneline '@{u}..HEAD' 2>/dev/null || true)
+	if [ -n "$ahead" ]; then
+		info "Pushing also sends these commits, which aren't on GitHub yet:"
+		printf '%s\n' "$ahead" | sed 's/^/     /'
+	fi
+	if ! confirm "Commit and push them now?" y; then
+		info "To do it later: cd ~/dotfiles && git add ssh && git commit -m \"$msg\" && git pull --rebase && git push"
+		info "Then run dotsync on your other Macs."
+		return 0
+	fi
+	if [ -z "$(git -C "$DOTFILES" config user.email || true)" ] || [ -z "$(git -C "$DOTFILES" config user.signingkey || true)" ]; then
+		warn "git has no identity or signing key on this Mac yet. Run ./bootstrap.sh git, which offers this again."
+		return 0
+	fi
+	if [ "$DRY_RUN" = 1 ]; then
+		dry "would commit them as \"$msg\", switch origin to SSH if it uses HTTPS, and push (rebasing first if another Mac pushed)"
+		return 0
+	fi
+	ssh_use_ssh_remote
+	# shellcheck disable=SC2086 # one path per word; aliases have no spaces
+	run git -C "$DOTFILES" add -- $files
+	# shellcheck disable=SC2086
+	if ! run git -C "$DOTFILES" commit -q -m "$msg" -- $files; then
+		warn "The commit failed, so nothing was pushed."
+		return 0
+	fi
+	# Rebase only when another Mac pushed in the meantime; --autostash covers other edits in progress
+	if run git -C "$DOTFILES" fetch -q &&
+		{ git -C "$DOTFILES" merge-base --is-ancestor '@{u}' HEAD 2>/dev/null ||
+			run git -C "$DOTFILES" rebase -q --autostash '@{u}'; } &&
+		run git -C "$DOTFILES" push -q; then
+		ok "pushed \"$msg\". Run dotsync on your other Macs so they trust this one."
+	else
+		warn "Committed, but not pushed. Fix the error above, then: git -C ~/dotfiles pull --rebase && git -C ~/dotfiles push"
+	fi
+}
+
 # ./bootstrap.sh ssh --print-keys
 ssh_print_keys() {
 	local f

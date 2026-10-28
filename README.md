@@ -34,10 +34,10 @@ Originally forked from [mathiasbynens/dotfiles](https://github.com/mathiasbynens
    - App Store sign-in
 
    Stages can be run on their own: `./bootstrap.sh brew`, `./bootstrap.sh ssh git`, and so on (`--help` lists them).
-4. Push this Mac's keys, so your other Macs trust it. Bootstrap writes them to `ssh/keys/` and `ssh/hosts/`:
+4. Push this Mac's keys, so your other Macs trust it. Bootstrap writes them to `ssh/keys/` and `ssh/hosts/`, and at the end offers to commit and push them. If the clone uses HTTPS, it switches `origin` to SSH first, since GitHub has this Mac's key by then. To do it yourself instead:
 
    ```bash
-   cd ~/dotfiles && git remote set-url origin git@github.com:Vortec4800/dotfiles.git && git add ssh && git commit -m "Add <name>'s SSH keys" && git push
+   cd ~/dotfiles && git remote set-url origin git@github.com:Vortec4800/dotfiles.git && git add ssh && git commit -m "Add <name>'s SSH keys" && git pull --rebase && git push
    ```
 
    Then run `dotsync` on each of your other Macs.
